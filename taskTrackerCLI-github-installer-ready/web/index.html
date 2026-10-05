@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>TaskTracker</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">T</div>
+        <div>
+          <h1>TaskTracker</h1>
+          <p>Local workspace</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-filter="all">
+          <span>◫</span><span>All tasks</span><b id="count-all">0</b>
+        </button>
+        <button class="nav-item" data-filter="todo">
+          <span>○</span><span>Todo</span><b id="count-todo">0</b>
+        </button>
+        <button class="nav-item" data-filter="in-progress">
+          <span>◌</span><span>In progress</span><b id="count-progress">0</b>
+        </button>
+        <button class="nav-item" data-filter="done">
+          <span>✓</span><span>Done</span><b id="count-done">0</b>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="storage-pill">
+          <span class="status-dot"></span>
+          Saved locally
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">TASK MANAGEMENT</p>
+          <h2 id="view-title">All tasks</h2>
+          <p id="view-subtitle">Everything you need to get done.</p>
+        </div>
+        <button id="add-task-btn" class="primary-btn">
+          <span>＋</span> New task
+        </button>
+      </header>
+
+      <section class="stats-grid">
+        <article class="stat-card">
+          <span class="stat-label">Total</span>
+          <strong id="stat-total">0</strong>
+          <small>Tasks in workspace</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">In progress</span>
+          <strong id="stat-progress">0</strong>
+          <small>Currently active</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Completed</span>
+          <strong id="stat-done">0</strong>
+          <small>Finished tasks</small>
+        </article>
+      </section>
+
+      <section class="toolbar">
+        <label class="search-box">
+          <span>⌕</span>
+          <input id="search-input" type="search" placeholder="Search tasks..." autocomplete="off" />
+        </label>
+
+        <div class="toolbar-actions">
+          <select id="sort-select" aria-label="Sort tasks">
+            <option value="updated-desc">Recently updated</option>
+            <option value="created-desc">Newest first</option>
+            <option value="created-asc">Oldest first</option>
+            <option value="title-asc">Title A–Z</option>
+          </select>
+          <button id="clear-completed-btn" class="ghost-btn">Clear completed</button>
+        </div>
+      </section>
+
+      <section class="task-panel">
+        <div class="task-panel-head">
+          <span id="results-label">0 tasks</span>
+          <span class="hint">Click a status badge to move a task</span>
+        </div>
+
+        <div id="task-list" class="task-list"></div>
+
+        <div id="empty-state" class="empty-state hidden">
+          <div class="empty-icon">✓</div>
+          <h3>No tasks here</h3>
+          <p>Create a task or change your filter.</p>
+          <button id="empty-add-btn" class="primary-btn">＋ New task</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="task-dialog">
+    <form id="task-form" method="dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">TASK DETAILS</p>
+          <h3 id="dialog-title">Create task</h3>
+        </div>
+        <button type="button" id="dialog-close" class="icon-btn" aria-label="Close">×</button>
+      </div>
+
+      <input type="hidden" id="task-id" />
+
+      <label class="field">
+        <span>Task title</span>
+        <input id="task-title" maxlength="140" placeholder="What needs to be done?" required />
+      </label>
+
+      <label class="field">
+        <span>Status</span>
+        <select id="task-status">
+          <option value="todo">Todo</option>
+          <option value="in-progress">In progress</option>
+          <option value="done">Done</option>
+        </select>
+      </label>
+
+      <div class="dialog-actions">
+        <button type="button" id="delete-task-btn" class="danger-btn hidden">Delete</button>
+        <div class="dialog-actions-right">
+          <button type="button" id="cancel-btn" class="ghost-btn">Cancel</button>
+          <button type="submit" class="primary-btn">Save task</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
