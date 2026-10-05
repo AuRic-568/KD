@@ -1,0 +1,52 @@
+name: Build TaskTracker
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  windows-installer:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Build JAR
+        shell: cmd
+        working-directory: taskTrackerCLI-github-installer-ready
+        run: build.bat
+
+      - name: Build Windows EXE installer
+        shell: pwsh
+        working-directory: taskTrackerCLI-github-installer-ready
+        run: |
+          New-Item -ItemType Directory -Force package-input, dist | Out-Null
+          Copy-Item TaskTracker.jar package-input\TaskTracker.jar
+
+          jpackage `
+            --type exe `
+            --name TaskTracker `
+            --app-version 1.0.0 `
+            --vendor TaskTracker `
+            --description "Local Task Tracker" `
+            --input package-input `
+            --main-jar TaskTracker.jar `
+            --main-class Main `
+            --win-menu `
+            --win-shortcut `
+            --win-dir-chooser `
+            --dest dist
+
+      - name: Upload Windows Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: TaskTracker-Windows-Installer
+          path: taskTrackerCLI-github-installer-ready/dist/*.exe
